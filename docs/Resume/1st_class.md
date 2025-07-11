@@ -33,4 +33,5 @@ We learned that reading three or more scientific articles on the same topic and 
 5. **Part 5** – Introduction to Scientific Computing with Python
 
 Finally, we discussed the topic of scientific computing with Python and what we will be learning throughout this module with the professor.
+
 ###
