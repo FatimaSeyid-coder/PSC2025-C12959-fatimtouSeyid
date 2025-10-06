@@ -27,6 +27,29 @@ Key elements of Python basic syntax are introduced:
 # This is a comment
 
 ```
+
+- Line joining: when the statement is too long you can split it across multiple line to make it easier to read, in this case you should use `\`. It is very usefull with math expression or long list for example.
+```python
+
+total = 1 + 2 + 3 + 4 + 5 + \
+        6 + 7 + 8 + 9 + 10
+
+```
+But in case you are inside **parenthees `()`**, **square brackets `[]`** or **curly braces `{}`** you don't need a line python automatically undrestands that the statement isn't finished yet.
+```python
+
+numbers = [
+    1, 2, 3, 4, 5,
+    6, 7, 8, 9, 10
+]
+
+result = (
+    10 + 20 +
+    30 + 40
+)
+
+```
+
 - Data types in Python: 
     - Number: it can be an integer, a real number, or a complex number. The usual operations for numbers are like: `+` for Addition, `-` for Subtraction, `*` for Multiplication, `\` for Division and `**` for power.
     ```python
@@ -42,6 +65,11 @@ Key elements of Python basic syntax are introduced:
 
     'valid string with single quote'
     "valid string with double quotes"
+
+    # In case you have multiple lines you can use triple quotes
+    """This is
+        a long,
+        long string"""
 
     ```  
     - Variable: it is a reference to an object, the assignment operator `=` is used to assign a value to a variable.
@@ -67,6 +95,9 @@ Key elements of Python basic syntax are introduced:
     L2[-1] # [5,0]
     L2[4] [1] #0
 
+    #range(n) create a list with n elements starting with 0
+    list(range(5)) #returns [0, 1, 2, 3, 4]
+
     #len() is a function that gives the length of a list
     len(L2) #returns 4
     len(L1) #returns 5
@@ -84,7 +115,14 @@ Key elements of Python basic syntax are introduced:
     #to concatenate a list by itself n times, multiplying it by the integer n is used
     4 * L3 #[1, 2, 1, 2, 1, 2, 1, 2]
     ```  
-    - Boolean expressions: it is an expression with `True` or `False` value. The operations in the boolean expressions are: `==` for equal, `!=` for not equal, `<` for strict less, `<=` foe less or equal, `>` for strict greater and `>=` foe greater or equal. For combinate different boolean values `or` and `and` are used.
+    - Boolean expressions: it is an expression with `True` or `False` value. The operations in the boolean expressions are: 
+            - `==` for equal, 
+            - `!=` for not equal, 
+            - `<` for strict less, 
+            - `<=` foe less or equal, 
+            - `>` for strict greater  
+            - `>=` foe greater or equal. 
+    For combinate different boolean values `or` and `and` are used.
     ```python
 
     2 >= 4 # False
@@ -155,14 +193,22 @@ Key elements of Python basic syntax are introduced:
     ``` 
 
 - Functions group reusable code. Defined using `def`, with input parameters and a return value. Functions are useful for organize the code.
+    ### Linear Function Example
+
+    The function is defined as:
+
+    $$
+    f(x) = 2x + 1
+    $$
+    In Python:
+
     ```python
-    
     def f(x):
-    return 2 * x + 1
+        return 2 * x + 1
 
-    print(f(2))  # returns 5
+    print(f(2)) #returns 5 
 
-    ``` 
+    ```
 
 - Scripts & modules
     - A script is a Python file (.py) containing code you can run.
@@ -173,12 +219,30 @@ Key elements of Python basic syntax are introduced:
     # smartfunctions.py
     def f(x):
         return 2 * x + 1
+    def g(x):
+        return x**2 + 4*x - 5
+    def h(x):
+        return 1/f(x)
 
     # In another script or IPython:
     import smartfunctions
-    from smartfunctions import f
-    print(f(2))  # returns 5
+    from smartfunctions import f #import just this function
 
+    z = []
+    for x in range(10):
+    if f(x) > pi:
+        z.append(x)
+    else:
+        z.append(-1)
+    print(z)
+    
+    #[-1, -1, 2, 3, 4, 5, 6, 7, 8, 9]
+    # so for f(0) =1 f(1) =3 they are <3.14 so they will add -1 except to the others >3.14 so add them 
+
+    #or in case you want to import all of the function
+    from smartfunctions import * #import all
+
+    print(h(2)*f(2)) # 1.0
     ``` 
 
 - Python Interpreter
