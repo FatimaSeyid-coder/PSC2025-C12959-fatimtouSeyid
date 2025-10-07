@@ -274,6 +274,9 @@ This chapter of the book explores the most important basic data types, including
     y = 'hello'  # string
     L = [1, 2, 3, 4] #list
 
+    #the function type() returns the type of the variable
+    type(L) #return list
+
 ``` 
 - Variable names in python are case-sensitive. It consists of any combination of capital or/and small letters, underscoer `_` and numbers, and must not begin with a number.
 - You can assign the same value to multiple variables.
@@ -295,7 +298,7 @@ This chapter of the book explores the most important basic data types, including
 ``` 
 2. **Numeric types**
 In Python, there are many number types: Integers, float and complex.
-- **Integers**: whole the numbers of the entire `Z`.
+- **Integers**: whole the numbers of the entire `Z` with the type `int`.
 ```python
     
     7 // 2  # 3 // returns an integer
@@ -314,9 +317,79 @@ In Python, there are many number types: Integers, float and complex.
 
     0.4 - 0.3 == 0.1 # returns False 0.1 != 0.10000000000000003
 
+``` 
+    - Infinite (inf): When results exceed the largest float or the smalest float → inf (infinity).
+    - Not a Number (NaN): Undefined or impossible results (like 0/0, inf - inf) → nan (Not a Number). /NaN is not equal to anything, even itself.
+
+```python
+    
+    from math import inf, nan
+    print(inf > 1e300)  # True
+    print(nan == nan)   # False
 
 ``` 
-- **Complex Numbers**: The numbers of the entire `C`.
+    - Underflow happens when results are too close to zero to be represented.
+    - Machine epsilon (ε) is the smallest difference that can be detected by the system.
+
+```python
+    
+    import sys
+    print(sys.float_info.epsilon)  # ≈ 2.22e-16
+
+    print(1.0 + eps == 1.0)       # False, epsilon is the smallest detectable step
+    print(1.0 + eps/2 == 1.0)     # True, half epsilon is too small to matter
+
+``` 
+    - Other float types in NumPy: NumPy provides different floating-point precisions: float16 (3-4 digits), float32(7 digits), and float64(15-16 digits).
+
+```python
+    
+    import numpy as np
+
+    a = np.array([1/3], dtype=np.float16)
+    b = np.array([1/3], dtype=np.float32)
+    c = np.array([1/3], dtype=np.float64)
+
+    print(a)  # [0.3333]
+    print(b)  # [0.33333334]
+    print(c)  # [0.3333333333333333]
+
+    print(a.dtype)    # float16
+    print(b.dtype)    # float32
+    print(c.dtype)    # float64
+
+``` 
+
+- **Complex Numbers**: The numbers of the entire `C`. In Python, complex numbers are built-in and written as `a + bj` (where j² = −1). They have a real part and an imaginary part.
+```python
+    
+    z = 3 + 2j
+    print(z)          # (3+2j)
+    print(type(z))    # <class 'complex'>
+
+    print(z.real)   # 3.0
+    print(z.imag)   # 2.0
+
+
+    #the operations
+    z1 = 1 + 2j
+    z2 = 3 - 4j
+
+    print(z1 + z2)  # (4-2j)
+    print(z1 - z2)  #(-2+6j)
+    print(z1 * z2)  # (11+2j)
+    print(z1 / z2)  # (-0.2+0.4j)
+
+``` 
+The function `conjugate()` returns the conjugate of the number(its reflection across the real axis): `z.conjugate() → returns (a - bj)`.
+The function `abs(z)` returns the magnitude (distance from origin): `abs(z) → returns the modulus √(a² + b²)`.
+```python
+    
+    z = 3 + 4j
+    print(z.conjugate())  # (3-4j)
+    print(abs(z))         # 5.0
+
+```    
 
 3. **Booleans**
 - Boolean variables can take only: `True` or `False`.
@@ -383,6 +456,36 @@ In Python, there are many number types: Integers, float and complex.
     '10B' < '11A' # returns true because '0' < '1'
 
     ``` 
+- Other string methods:
+    - Splitting a string: `split()` converts strings to lists using blanks as separators. `split(separator)` uses a specified substring as separator.
+     ```python
+    
+    text = 'quod erat demonstrandum'
+    text.split() # returns ['quod', 'erat', 'demonstrandum']
+    table = 'Johan;Carlsson;19890327'
+    table.split(';') # returns ['Johan','Carlsson','19890327']
+    king = 'CarlXVIGustaf'
+    king.split('XVI') # returns ['Carl','Gustaf']
+
+    ```   
+
+    - Joining Lists: `join()` converts lists to strings (reverse of splitting).
+    ```python
+      
+    sep = ';'
+    sep.join(['Johan','Carlsson','19890327']) 
+    # returns 'Johan;Carlsson;19890327'
+
+    ```
+
+    - Searching Strings: `find(substring)` returns the first index where substring starts, it returns `-1` if substring not found.
+    ```python
+      
+    birthday = '20101210'
+    birthday.find('10') # returns 2
+
+    ```
+
  ###
 
 ## Chapter 3: Container Types
