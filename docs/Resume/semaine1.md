@@ -521,18 +521,86 @@ This chapter of the book introduces the container types: lists, arrays, tuples, 
     L7[1:4]                      # ['b', 'c', 'd'] (from index 1 to 3)
     L7[:3]                       # ['a', 'b', 'c']
     L7[-2:]                      # ['d', 'e'] (step = 2)
+    L7[:-2]                      # ['a', 'b', 'c']
     L7[::-1]                     # ['e', 'd', 'c', 'b', 'a'] (reversed list)
+    L7[1:]                      # ['b', 'c', 'd', 'e'] from index 1 
+    L[:]                        # ['a', 'b', 'c', 'd', 'e']  the entire list
+
+    # Slicing with Out-of-Bounds Indexes
+    L = list(range(4))
+    L[4] # IndexError: list index out of range
+    L[1:] # [1, 2, 3]
+    L[1:100] # [1, 2, 3] same as L[1:] is like L[1:4]
+    L[:-1]  # [0, 1, 2]
+    L[-100:-1] # [0, 1, 2] same as L[:-1] is like L[0:3]
+    L[:]       # [0, 1, 2, 3]
+    L[-100:100] # [0, 1, 2, 3] same as L[:] is like L[0:4] 
+    L[5:0] # empty list []
+    L[-2:2] # empty list []
+
+    a = [1,2,3]
+    for iteration in range(4):
+        print(sum(a[0:iteration-1]))
+        # 3 0 1 3
+        # 1st iteration 0: a[0:-1] -> a[:-1] -> 1,2 -> 1+2=3
+        # 2nd iteration 1: a[0:0] -> a[:0] -> [] =0
+        # 3rd iteration 2: a[0:1] -> a[:1] -> 1 = 1
+        # 4th iteration 3: a[0:2] -> a[:2] -> 1,2 -> 1+2=3
+
+    # Strides (by default is 1 but we can also specify a stride)
+    L = list(range(100))
+    L[:10:2] # [0, 2, 4, 6, 8]
+    L[::20] # [0, 20, 40, 60, 80]
+    L[10:20:3] # [10, 13, 16, 19]
+    L[20:10:-3] # [20, 17, 14, 11]
+    L = [1, 2, 3]
+    R = L[::-1] # -1: go backwards
+    R # [3, 2, 1]
 
     #Altering lists
-    L = [10, 20, 30, 40]
-    L[2] = 99     # L becomes [10, 20, 99, 40]
-    L[1:3] = [7]  # Replace two elements with one → [10, 7, 40]
-    
+    L = [10, 20, 30, 40, 'a']
+    L[2] = 99     # L becomes [10, 20, 99, 40, 'a']
+    L[1:3] = [7]  # Replace two elements with one → [10, 7, 40, 'a']
+    # Deletion
+    L[2:3] = []    # [10, 7, 'a']
+    L[2:] = []     # [10, 7]
+    # Insertion
+    L[1:1] = [1000, 2000] # [10, 1000, 2000, 7]
+    # + operation
+    L = [1, -17]
+    M = [-23.5, 18.3, 5.0]
+    L + M # gives [1, -17, 23.5, 18.3, 5.0]
+    # * operation
+    n = 3
+    n * [1.,17,3] # gives [1., 17, 3, 1., 17, 3, 1., 17, 3]
+    [0] * 5 # gives [0,0,0,0,0]
+
+    #appartient and appartient pas
+    L = ['a', 1, 'b', 2]
+    'a' in L # True
+    3 in L # False
+    4 not in L # True
+    # so in = appartient && not in = n'appartient pas
+
     # List comprehension
-    squares = [x**2 for x in range(5)]  # [0, 1, 4, 9, 16]
+    L = [2, 3, 10, 1, 5]
+    L2 = [x*2 for x in L] # [4, 6, 20, 2, 10]
+    L3 = [x*2 for x in L if 4 < x <= 10] # [20, 10]
+    Sq = [x**2 for x in range(5)]  # [0, 1, 4, 9, 16]
+
+    M = [[1,2,3],[4,5,6]]
+    flat = [M[i][j] for i in range(2) for j in range(3)]
+    # returns [1, 2, 3, 4, 5, 6]
+    # i in 0,1 && j in 0,1,2
+    # M[0][0] -> 1
+    # M[0][1] -> 2
+    # M[0][2] -> 3
+    # M[1][0] -> 4
+    # M[1][1] -> 5
+    # M[1][2] -> 6
 
 ``` 
-- Common list operations
+- Common list methods
 ```python
     
     L = [3, 1, 2]
@@ -553,16 +621,20 @@ This chapter of the book introduces the container types: lists, arrays, tuples, 
     # gives [('red', 0), ('green', 1)]
 
 ``` 
+
 2. **Arrays**(Previw)
 `NumPy` package provides arrays for efficient numerical computing. Arrays are constructed from lists by the function `array`.
 ```python
     
     from numpy import array
     v = array([1.,2.,3.])
-    A = array([[1.,2.,3.],[4.,5.,6.]])
+    M = array([[1.,2.,3.],[4.,5.,6.]])
 
-    v[2] # returns 3.0
-    A[1,2] # returns 6.0
+    v[0] # returns 1.0
+    v[:2] # returns array([1., 2.])
+    M[0,1] # returns 2.0
+    M[1,2] # returns 6.0
+
 
 ```
 - Arrays are different to the lists, they store elements of the same numeric type (e.g., float, int, complex).
@@ -575,6 +647,19 @@ This chapter of the book introduces the container types: lists, arrays, tuples, 
 
     v1 = array([1, 2, 3])
     v2 = array([4, 5, 6])
+
+    len(v1)     # 3
+
+    # Element-wise operations
+    v1 + v2  # array([5, 7, 9])
+    v1 - v2 # array([-3, -3, -3])
+    v1 * v2 # array([4, 10, 18])
+    v1 / v2 # array([0.25, 0.4, 0.5])
+    v1 ** 2 # array([1, 4, 9])
+
+    v1 + 10 # array([11, 12, 13])
+    v1 * 2 # array([2, 4, 6])
+    1 / v1 # array([1. , 0.5 , 0.33333333])
 
     # Dot product: 1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32
     print(dot(v1, v2))  # 32
@@ -594,6 +679,25 @@ A tuple is like a list, but immutable (cannot be changed). It defined with or wi
     my_tuple[0] # 1
     my_tuple[0] = 'a' # error! tuples are immutable
 
+    1, 2 == 3, 4 # returns (1, False, 4)
+    # this is not a comparaison between 2 tuples it is one tuple
+    # 1st element -> 1
+    # 2nd element -> (2 == 3) this is false because 2 !=3
+    # 3rd element -> 4
+    # so the tuple is (1, False, 4)
+
+    (1, 2) == (3, 4) # returns False
+    # This compares two tuples → Fals
+
+    singleton = 1, # note the comma indicates that the object is a tuple
+    len(singleton) # 1
+    singleton = (1,) # this creates the same tuple
+
+    a, b = 0, 1 # a gets 0 and b gets 1
+    a, b = [0, 1] # exactly the same effect
+    (a, b) = 0, 1 # same
+    [a,b] = [0,1] # same thing
+
 ```
 4. **Dictionaries**
 Different to the lists, tuples and arrays, the dictionarie deosn't according to their place in the sets of objects, its data are accessing by their keys. The key must be unique and immutable.
@@ -603,13 +707,41 @@ Different to the lists, tuples and arrays, the dictionarie deosn't according to 
     print(student['name'])      # 'Alice'
     student['grade'] = 'A'      # add a new key
 
+    #the commande dict generates a dictionary from a list with key/value pairs:
+    truck_wheel = dict([('name','wheel'),('mass',5.7),
+    ('Ix',20.0), ('Iy',1.), ('Iz',17.),
+    ('center of mass',[0.,0.,0.])])
+    # {'name': 'wheel','mass': 5.7,'Ix': 20.0,'Iy': 1.0,'Iz': 17.0,'center of mass': [0.0, 0.0, 0.0]}
+
+    # Looping over dictionaries
+    for key in truck_wheel.keys():
+        print(key)
+        # prints (in any order)  'name','mass','Ix','Iy','Iz', 'center of mass'
+    
+    for key in truck_wheel:
+        print(key)
+        # prints (in any order)  'name','mass','Ix','Iy','Iz', 'center of mass'
+
+    for value in truck_wheel.values():
+        print(value)
+        # prints (in any order) 'wheel','5.7','20.0','1.0','17.0','[0.0, 0.0, 0.0]'
+
+    for value in truck_wheel:
+        print(value)  
+        # prints (in any order)  'name','mass','Ix','Iy','Iz', 'center of mass'
+        # 
+
+    for item in truck_wheel.items():
+        print(item)
+        # prints (in any order) ('name', 'wheel')('mass', 5.7)('Ix', 20.0)('Iy', 1.0)('Iz', 17.0)('center of mass', [0.0, 0.0, 0.0])
+
 ```
 5. **Sets**
 A set is an unordered collection of unique elements. It  shares properties and operations with sets in mathematics.
 ```python
     
     A = {1, 2, 3} # this is a set
-    B = {2, 3, 4}
+    B = {5}
 
 ```
 - Basic set operations
@@ -633,6 +765,16 @@ A set is an unordered collection of unique elements. It  shares properties and o
     print(3 in A)               # True
     print(5 in A)               # False
 
+    A = {1,2,3,3,3}
+    B = {1,2,3}
+    A # returns {1,2,3}
+    A == B # returns True
+    
+    # set is unordered
+    A = {1,2,3}
+    B = {1,3,2}
+    A == B # returns True
+
     # Subset: checks if all elements of one set are in another
     C = {2, 3}
     print(C.issubset(A))        # True
@@ -650,4 +792,19 @@ A set is an unordered collection of unique elements. It  shares properties and o
     print(type(empty))          # <class 'set'>
 
 ```
+
+6. **Checking the type of a variable**
+```python
+    
+    #type() method
+    label = 'local error'
+    type(label) # returns str
+    x = [1, 2] # list
+    type(x) # returns list
+
+    #isinstance() method
+    isinstance(x, list) # True
+    
+```
+
 ###
