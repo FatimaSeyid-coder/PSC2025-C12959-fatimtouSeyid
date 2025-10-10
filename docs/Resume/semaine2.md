@@ -434,6 +434,185 @@ data.
     # so reshape doesn't create a new array it is just give a new of the existing one
 
 ``` 
+    - reshape() doesn't create a new array it is just give a new of the existing one.
+
+    - reshape() with (-1): Figures out this dimension automatically while the total number of elements stays the same.
+```python
+
+    from numpy import *
+
+    v = array([1, 2, 3, 4, 5, 6, 7, 8])  # 8 elements
+
+    # Using -1 to auto-calculate dimensions
+    M = v.reshape(2, -1)    # Make it 2 rows, and figure out the columns automatically
+    # Total elements = 8 && Rows = 2 && Columns = 8 ÷ 2 = 4 && Result: 2×4 matrix
+    shape(M)                # returns (2, 4)
+
+    M = v.reshape(-1, 2)    # 4×2 (8÷2=4 rows)  
+    # Total elements = 8 && Rows = 2 && Columns = 8 ÷ 2 = 4 && Result: 4x2 matrix
+    shape(M)                # returns (4, 2)
+
+    M = v.reshape(4, -1)    # Make it 4 rows, and figure out the columns automatically
+    # Total elements = 8 && Rows = 4 && Columns = 8 ÷ 4 = 2 && Result: 4x2 matrix
+    shape(M)                # returns (4, 2)
+
+    # This will FAIL - dimensions must multiply to total elements
+    M = v.reshape(3, -1)  # Make it 3 rows, and figure out the columns automatically"
+    # Total elements = 8 && Rows = 3 && Columns = 8 ÷ 3 = 2.666 ❌
+    # This fails because 8 ÷ 3 is not an integer!
+
+```
+- Transpose: It switches the two shape elements of the matrix. 
+```python
+    from numpy import *
+
+    A = array([[1, 2, 3, 4],
+       [5, 6, 7, 8],
+          [9, 10, 11, 12]])
+
+    shape(A) # (3, 4)
+
+    B = A.T # array([[ 1,  5,  9],
+       #        [ 2,  6, 10],
+       #        [ 3,  7, 11],
+       #        [ 4,  8, 12]])
+    shape(B) # (4, 3)
+
+    # transpose on vectors
+    v = array([1., 2., 3.])
+    v.T # exactly the same vector!
+
+    #same for reshape
+    v.reshape(-1, 1) # column matrix containing v = array([1., 2., 3.])
+    v.reshape(1, -1) # row matrix containing v = array([1., 2., 3.])
+
+``` 
+transpose is very similar to reshaping, it just returns a view on the same array.
+
+9. **Stacking**
+They are 3 methods to stack using: hstack(), vstack() and column_stack().
+- `hstack`: Used to stack arrays horizontally
+- `vstack`: Used to stack arrays vertically
+- `columnstack`: Used to stack vectors in columns
+```python
+    from numpy import *
+
+    # vectors
+    v1 = array([1., 2.])
+    v2 = array([3., 4.]) 
+
+    vstack([v1,v2]) # array([[1., 2.],
+                    #        [3., 4.]])
+
+    hstack([v1,v2]) # array([1., 2., 3., 4.])
+
+    column_stack([v1,v2]) # array([[1., 3.],
+                          #         [2., 4.]])
+
+    # matrices
+    A = array([[1, 2],
+           [3, 4]])
+
+    B = array([[5, 6],
+           [7, 8]])
+
+    vstack([A, B])  # array([[1, 2],
+                    #       [3, 4],
+                    #       [5, 6],
+                    #       [7, 8]])
+    
+    hstack([A, B]) # array([[1, 2, 5, 6],
+                   #        [3, 4, 7, 8]])
+
+    column_stack([A, B]) # array([[1, 2, 5, 6],
+                         #        [3, 4, 7, 8]])
+    
+    # vector - matrice
+    hstack([v1, A]) # ValueError
+    hstack([A, v1]) # ValueError
+
+    vstack([A, v1]) # array([[1., 2.],
+                    #       [3., 4.],
+                    #       [1., 2.]])
+
+    column_stack([A, v1]) # array([[1., 2., 1.],
+                          #        [3., 4., 2.]])  
+                                            
+``` 
+
+10. **Functions acting on arrays**
+there are two different of functions acting on arrays: **universal functions**, they act elementwise and returning an array of the same shape; and **non-univeral functions** return an array of a different shape.
+
+- Universal function predefined
+```python
+    from numpy import *
+
+    # Built-in universal functions
+    cos(pi)                          # -1 (scalar input)
+    cos(array([0, pi/2, pi]))        # array([1, 0, -1]) (array input)
+
+    # Mathematical operators are also universal
+    2 * array([2, 4]) # array([4, 8])
+    array([1, 2]) * array([1, 8]) # array([1, 16])
+    array([1, 2])**2 # array([1, 4])
+    2**array([1, 2]) # array([1, 4]) <- [2¹, 2²] = [2, 4]
+    array([1, 2])**array([1, 2]) # array([1, 4])
+
+``` 
+
+- Universal function created manually
+Any function contains only the universal functions in it will be authomatically an universal function. 
+```python
+    from numpy import *
+
+    def const(x):
+        return 1
+    const(array([0, 2])) # returns 1 instead of array([1, 1])
+
+``` 
+
+- Converting Non-Universal to Universal Functions
+```python
+    from numpy import *
+
+    # Problème: Fonctions non-universelles
+    def heaviside(x):
+        if x >= 0:
+            return 1.
+        else:
+            return 0.
+    heaviside(array([-1, 2])) # error
+
+    # Solution: vectorize
+    @vectorize
+    def heaviside(x):
+        if x >= 0: 
+            return 1
+        else: 
+            return 0
+
+    heaviside(array([-1, 2]))  # → [0, 1] ✓
+
+``` 
+- Array functions
+Many functions act on the entire array different of the universal functions that act componentwizely(element-wize).
+```python
+    from numpy import *
+
+    A = array([[1,2,3,4],
+           [5,6,7,8]])
+    
+    # example of non-universal functions
+    sum(A) # 36 
+    sum(A, axis=0) # array([ 6, 8, 10, 12]) -> somme par COLONNES (vertical)
+    sum(A, axis=1) # array([10, 26]) -> somme par LIGNES (horizontal)
+
+    # sum can used as attribuate
+    A.sum(axis=1) # array([10, 26])
+
+``` 
+
+11. **Linear algebra methods in SciPy**
 
 
 ###
