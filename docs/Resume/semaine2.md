@@ -614,5 +614,70 @@ Many functions act on the entire array different of the universal functions that
 
 11. **Linear algebra methods in SciPy**
 
+`SciPy` offers a large range of methods from numerical algebra in the module `scipy.linalg`. Knowing that `numpy.linalg` offers some linear algebra but `scipy.linalg` is more comprehensive because its focus is  on scientific computing methods, while while NumPy's focus is on the array datatype.
+
+- **Example 1:** Solving Multiple Linear Systems
+Let `A` be an `n × n` matrix and `b₁, b₂, ..., bₖ` be a sequence of `n` vectors. We consider theproblem to find `n` vectors such that: 
+            A x₁ = b₁
+            A x₂ = b₂
+                ⋮
+            A xₖ = bₖ 
+
+**numpy.linalg way (basic):**
+```python
+    from numpy.linalg import solve
+
+    x1 = solve(A, b1)  # Does full computation
+    x2 = solve(A, b2)  # Does full computation again  
+    x3 = solve(A, b3)  # Does full computation again
+
+``` 
+Slow - recomputes everything each time.
+
+**scipy.linalg way (optimized):**
+```python
+    import scipy.linalg as sl
+
+    LU, piv = sl.lu_factor(A)    # Expensive step once
+    x1 = sl.lu_solve((LU, piv), b1)  # Fast
+    x2 = sl.lu_solve((LU, piv), b2)  # Fast
+    x3 = sl.lu_solve((LU, piv), b3)  # Fast
+
+``` 
+Fast - reuses factorization
+
+- **Example 2:** Solving Least Squares problem with SVD
+Let `A` be an `m × n` matrix with `m > n` (overdetermined linear system) and `b` be an `m` vector. We want to find `x` that minimizes:
+            ‖A x - b‖²
+Using Singular Value Decomposition (SVD):
+            A = U Σ Vᵀ
+Where:
+    - `U` is `m × m` orthogonal matrix 
+    - `Σ` is `m × n` diagonal matrix with singular values 
+    - `V` is `n × n` orthogonal matrix
+The solution is:
+            x = V Σ⁺ Uᵀ b
+Where `Σ⁺` is the pseudoinverse of `Σ`:
+            Σ⁺ = [Σ₁⁻¹   0]
+                 [  0    0]
+And `Σ₁⁻¹` is the diagonal matrix containing `1/σᵢ` for the non-zero singular values.
+
+**numpy.linalg way (basic):**
+```python
+    from numpy.linalg import lstsq
+
+    x, residuals, rank, s = lstsq(A, b)
+
+```
+Works but less robust.
+
+**scipy.linalg way (optimized):**
+```python
+    import scipy.linalg as sl
+
+    x = sl.lstsq(A, b)[0]  # More numerically stable
+    U, s, Vt = sl.svd(A)   # Can do SVD manually for more control
+
+```
 
 ###
