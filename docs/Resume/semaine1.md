@@ -259,7 +259,8 @@ result = (
     f(2)   # Error happens here (y is not defined)
 
     ``` 
-###    
+### 
+##    
 
 ## Chapter 2: Variables and Basic Types
 
@@ -487,6 +488,8 @@ The function `abs(z)` returns the magnitude (distance from origin): `abs(z) → 
     ```
 
  ###
+
+## 
 
 ## Chapter 3: Container Types
 
@@ -808,3 +811,6 @@ A set is an unordered collection of unique elements. It  shares properties and o
 ```
 
 ###
+
+##
+#
